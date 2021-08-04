@@ -3,11 +3,11 @@ package DataStructures.queue;
 /*
     数组模拟队列
 
-    问题：何时提醒，何时报错？
-        showQueue中全部都输出了
+    问题：1. 何时提醒，何时报错？
+         2. showQueue中无效元素也都输出了
 
     知识点：Scanner需要关闭。
-    Scanner还是我们平时配合System.in标准输入流来使用，in是InputStream类型，一个字节流。
+    Scanner平时配合System.in标准输入流来使用，in是InputStream类型，一个字节流。
     scanner的close()调用的是Inputstream的close()。在平时自己学习时可以不加。
     在工作上开发程序时，一定要加上，因为不关闭连接可能导致I/O，线程阻塞、系统文件描述符打开过多等问题
  */
@@ -78,7 +78,8 @@ class ArrayQueue {
     public ArrayQueue(int maxSize) {
         this.maxSize = maxSize;
         array = new int[maxSize];
-        front = -1;//队列头指向队列头部。规定指向第一个数据前一个位置。因为取出数据后front向后移动，需要指向rear才能判断出空
+        front = -1;//队列头指向队列头部。规定指向第一个数据前一个位置。因为取出数据后front向后移动，
+        // 需要指向rear才能判断出 isEmpty()这个条件
         rear = -1;// 队列尾指向队列尾部，指向队列的最后一个数据。
         //front、rear初始值都是 -1 ，是为了后面add、remove 时操作后恰好可以表示队列空、满的情况
     }
