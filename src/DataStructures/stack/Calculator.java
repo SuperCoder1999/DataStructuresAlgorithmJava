@@ -8,6 +8,8 @@ package DataStructures.stack;
     4.如果优先级不高于栈顶 就将栈顶的符号取出 然后从取出数字栈中取两个数字，进行计算，计算结果入数字栈
     再次判断 入栈的 运算符 是否高于 栈顶的。
     5.直到字符串遍历完。再将运算符栈、数字栈中的剩余元素取出计算。最终得到结果
+
+    优化：可以将expression 以数字和运算符依次存入List中，这样从左向右遍历方便。
  */
 
 public class Calculator {
@@ -146,6 +148,4 @@ class MyStack {
         top--;//栈顶元素没抹除(概念上的抹除)实际array中还保存着。
         return value;
     }
-
-
 }

@@ -1,3 +1,9 @@
+package questions;
+
+/*
+    对于引用类型的一些误解。
+ */
+
 public class Test {
     public static void main(String[] args) {
         A a = new A();
