@@ -3,11 +3,34 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+/*
+    快速排序：
+    时间复杂度：n*log2(n)
+    耗时：1s（8w数据）
+ */
+
 public class QuickSort {
     public static void main(String[] args) {
-        int[] array2 = {2, 1, 4, 2, 56, 7, 4, 3};
+        /*int[] array2 = {2, 1, 4, 2, 56, 7, 4, 3};
         quickSort(array2,0, array2.length - 1);
-        System.out.println(Arrays.toString(array2));
+        System.out.println(Arrays.toString(array2));*/
+
+        //创建8w随机数组，进行测试运行时间
+        //创建数组
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        int[] array2 = new int[80000];
+        for (int i = 0; i < 80000; i++) {
+            array2[i] = (int)(Math.random() * 80000 + 1);//[1, 80001)
+        }
+        //记录开始时间
+        Date date1 = new Date();
+        String date1Str = simpleDateFormat.format(date1);
+        System.out.println("快速排序开始时时间：" + date1Str);
+
+        quickSort(array2, 0, array2.length - 1);
+
+        Date date2 = new Date();
+        System.out.println("结束时间:" + simpleDateFormat.format(date2));
     }
 
     public static void quickSort(int[] nums, int left, int right) {
