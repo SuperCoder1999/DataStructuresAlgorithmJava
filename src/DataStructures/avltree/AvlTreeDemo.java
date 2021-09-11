@@ -1,33 +1,30 @@
-package DataStructures.binarysorttree;
+package DataStructures.avltree;
+/*
+    平衡二叉排序树
+ */
 
-public class BinarySortTreeTest {
+public class AvlTreeDemo {
     public static void main(String[] args) {
-        int[] arr = {7, 3, 10, 12, 5, 1, 9, 2};//第一个数字会作为二叉排序树的树根
-        //int[] arr = {7, 3, 10, 12, 5, 6};
-        BinarySortTree binarySortTree = new BinarySortTree();
+        //int[] arr = {4, 3, 6, 5, 7, 8};
+        //int[] arr = { 10, 12, 8, 9, 7, 6 };
+        //int[] arr = { 10, 11, 7, 6, 8, 9 };//混合旋转 左边情况
+        int[] arr = {10, 7, 20, 19, 18, 21};
+        AvlBinarySortTree avlBinarySortTree = new AvlBinarySortTree();
         for (int i = 0; i < arr.length; i++) {
-            Node node = new Node(arr[i]);
-            binarySortTree.addNode(node);
+            avlBinarySortTree.addNode(new Node(arr[i]));
         }
-        binarySortTree.infixOrder();
 
-        binarySortTree.delNode(2);
-        binarySortTree.delNode(5);
-        binarySortTree.delNode(9);
-        binarySortTree.delNode(12);
-        binarySortTree.delNode(7);
-        binarySortTree.delNode(3);
-        binarySortTree.delNode(1);
-        binarySortTree.delNode(10);
-        //binarySortTree.delNode(7);
-
-        System.out.println("删除结点后");
-        System.out.println("root=" + binarySortTree.root);
-        binarySortTree.infixOrder();
+        //遍历
+        System.out.println("中序遍历");
+        avlBinarySortTree.infixOrder();
+        System.out.println("----");
+        System.out.println(avlBinarySortTree.root.height());
+        System.out.println(avlBinarySortTree.root.leftHeight());
+        System.out.println(avlBinarySortTree.root.rightHeight());
     }
 }
 
-class BinarySortTree {
+class AvlBinarySortTree {
     public Node root = null;
 
     //删除根节点中右节点上最小节点
@@ -42,7 +39,7 @@ class BinarySortTree {
          */
         return targetNode.value;
     }
-    // 27-23 20-20 24-24 16-25 40-36  
+    // 27-23 20-20 24-24 16-25 40-36
 
     //删除根节点中左分支上最大节点
     public int delLeftTreeMax(Node node) {
@@ -130,6 +127,43 @@ class BinarySortTree {
             root = node;
         else
             root.addNode(node);
+        //原本是在Node类中进行调整，我认为应该在树中进行调整
+        adjust();
+    }
+
+    public void adjust() {
+        if (root.leftHeight() - root.rightHeight() > 1) {
+            if (root.left != null && root.left.rightHeight() > root.left.leftHeight()) {
+                leftRotate(root.left);
+            }
+            rightRotate(root);
+            return;
+        }
+        if (root.rightHeight() - root.leftHeight() > 1) {
+            if (root.right != null && root.right.leftHeight() > root.right.rightHeight()){
+                rightRotate(root.right);
+            }
+            leftRotate(root);
+            return;
+        }
+    }
+
+    public void leftRotate(Node root) {
+        Node newNode = new Node(root.value);
+        newNode.left = root.left;
+        newNode.right = root.right.left;
+        root.value = root.right.value;
+        root.right = root.right.right;
+        root.left = newNode;
+    }
+
+    public void rightRotate(Node root) {
+        Node newNode = new Node(root.value);
+        newNode.right = root.right;
+        newNode.left = root.left.right;
+        root.value = root.left.value;
+        root.left = root.left.left;
+        root.right = newNode;
     }
 
     //中序遍历二叉排序树
@@ -141,10 +175,28 @@ class BinarySortTree {
     }
 }
 
-class Node {
+
+
+class Node { // 哪个调用了这个类中的函数，则成员变量就是属于哪个节点的。如：root.add(node)，其中left\right都是root的
     public int value;
     public Node left;
     public Node right;
+
+    public int leftHeight() {
+        if (left == null)
+            return 0;
+        return left.height();
+    }
+
+    public int rightHeight() {
+        if (right == null)
+            return 0;
+        return right.height();
+    }
+
+    public int height() {
+        return Math.max(this.left == null ? 0 : this.left.height() , this.right == null ? 0 : this.right.height()) + 1;
+    }
 
     //按照数值查找节点的父节点 ---- 应该可以用一个方法 返回数值所在节点和其父节点
     public Node searchParent(int value) {
@@ -154,7 +206,7 @@ class Node {
             if (this.left != null && value < this.value)
                 return this.left.searchParent(value);
             else if (this.right != null && this.value < value)
-                    return this.right.searchParent(value);
+                return this.right.searchParent(value);
             else return null;
         }
     }
